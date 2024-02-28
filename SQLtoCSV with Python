@@ -20,7 +20,7 @@ def connect_to_sql_server():
         return None
 
 # Function to update table data using the procedure.
-def atualizar_tabela(connection):
+def update_table(connection):
     try:
         cursor = connection.cursor()
         cursor.execute("EXEC The name of your procedure")
@@ -77,7 +77,7 @@ connection = connect_to_sql_server()
 
 # If the connection was established successfully, update the table and execute the query.
 if connection:
-    atualizar_tabela(connection)
+    update_table(connection)
     cursor = connection.cursor()
     cursor.execute(sql_query)
     rows = cursor.fetchall()
