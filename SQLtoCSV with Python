@@ -1,0 +1,91 @@
+import pyodbc
+import pandas as pd
+import os
+import csv
+from datetime import datetime
+
+# Function to connect to SQL Server.
+def connect_to_sql_server():
+    try:
+        connection = pyodbc.connect(
+            "Driver={SQL Server};"
+            "Server=;"
+            "Database=;"
+            "Trusted_Connection=yes;"
+        )
+        print("Connection to SQL Server established successfully.")
+        return connection
+    except Exception as e:
+        print("Error connecting to SQL Server:", e)
+        return None
+
+# Function to update table data using the procedure.
+def atualizar_tabela(connection):
+    try:
+        cursor = connection.cursor()
+        cursor.execute("EXEC The name of your procedure")
+        cursor.commit()
+        cursor.close()
+        print("Table updated successfully.")
+    except Exception as e:
+        print("Error updating the table:", e)
+
+
+# Function to split the results into batches according to the specified size.
+def chunk_results(results, chunk_size):
+    for i in range(0, len(results), chunk_size):
+        yield results[i:i + chunk_size]
+
+# Function to save the data into CSV files.
+def save_to_csv(result_chunks, output_directory):
+    os.makedirs(output_directory, exist_ok=True)
+
+    # Nomes das colunas
+    column_names = ['A', 'B', 'C']
+
+    for i, chunk in enumerate(result_chunks):
+        file_name = os.path.join(output_directory, f'cep_{i + 1}.csv')
+
+        # Write the data to the CSV file.
+        with open(file_name, 'w', newline='', encoding='utf-8-sig') as file:
+            writer = csv.writer(file, delimiter=';')
+
+            # Write the column names as the first row.
+            writer.writerow(column_names)
+
+            # Write the data.
+            writer.writerows(chunk)
+
+        print(f'File {file_name} created successfully.')
+
+
+# SQL query to execute.
+sql_query = "SELECT A,B,C FROM Your table"
+
+# Maximum number of rows per CSV file.
+max_rows_per_file = 10000
+
+# Base directory where the CSV files will be saved.
+base_output_directory = r'File path.'
+
+# Create base directory with name based on current date and time.
+current_datetime = datetime.now().strftime('%Y%m%d%H%M%S')
+output_directory = os.path.join(base_output_directory, f'FileName_A_{current_datetime}')
+
+# Connect to SQL Server.
+connection = connect_to_sql_server()
+
+# If the connection was established successfully, update the table and execute the query.
+if connection:
+    atualizar_tabela(connection)
+    cursor = connection.cursor()
+    cursor.execute(sql_query)
+    rows = cursor.fetchall()
+    cursor.close()
+    connection.close()
+
+    # Split the results into batches.
+    result_chunks = chunk_results(rows, max_rows_per_file)
+
+    # Save the data into CSV files.
+    save_to_csv(result_chunks, output_directory)
