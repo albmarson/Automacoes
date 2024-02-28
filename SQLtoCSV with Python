@@ -40,7 +40,7 @@ def chunk_results(results, chunk_size):
 def save_to_csv(result_chunks, output_directory):
     os.makedirs(output_directory, exist_ok=True)
 
-    # Nomes das colunas
+    # Column names
     column_names = ['A', 'B', 'C']
 
     for i, chunk in enumerate(result_chunks):
