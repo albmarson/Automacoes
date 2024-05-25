@@ -1,4 +1,6 @@
-Este script em Python facilita a extração de dados de um banco de dados SQL Server e os salva em arquivos CSV. Ele utiliza a biblioteca pyodbc para conectividade com o banco de dados e pandas para manipulação de dados. O processo envolve conectar-se ao SQL Server, atualizar a tabela, se necessário, executar uma consulta SQL para recuperar os dados e, em seguida, dividir e salvar os resultados em arquivos CSV.
+Este script em Python facilita a extração de dados de um banco de dados SQL Server e os salva em arquivos CSV. 
+
+Ele utiliza a biblioteca pyodbc para conectividade com o banco de dados e pandas para manipulação de dados. O processo envolve conectar-se ao SQL Server, atualizar a tabela, se necessário, executar uma consulta SQL para recuperar os dados e, em seguida, dividir e salvar os resultados em arquivos CSV.
 
 Recursos Principais:
 
